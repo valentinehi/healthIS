@@ -1,0 +1,16 @@
+<?php
+include 'db.php';
+
+$id = $_GET['id'];
+$client = $conn->query("SELECT * FROM clients WHERE id = $id")->fetch_assoc();
+$programs = [];
+
+$result = $conn->query("SELECT p.name FROM enrollments e JOIN programs p ON e.program_id = p.id WHERE e.client_id = $id");
+while ($row = $result->fetch_assoc()) {
+    $programs[] = $row['name'];
+}
+
+$client['programs'] = $programs;
+
+echo json_encode($client);
+?>
